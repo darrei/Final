@@ -28,7 +28,7 @@ class Client:
                 sock.sendall(f"get {key}\n".encode("utf-8"))
 
             data = sock.recv(1024)
-            a = data.decode("utf-8")
+            a = data.decode("utf-8","ignore")
             self.data = dict()
             if a == 'ok\n\n':
                 return {}
