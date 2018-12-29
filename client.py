@@ -27,26 +27,26 @@ class Client:
             with socket.create_connection((self.host, self.port), self.timeout) as sock:
                 sock.sendall(f"get {name}\n".encode("utf-8"))
 
-            data = sock.recv(1024)
-            a = data.decode("utf-8","ignore")
-            data = dict()
-            if a == 'ok\n\n':
-                return {}
-
-            elif a == 'error\nwrong command\n\n':
-                raise ClientError
-
-            for row in a.split("\n")[1:-2]:
-                key = str(row.split()[0])
-                value = float(row.split()[1])
-                timestamp = int(row.split()[2])
-
-
-                if key not in data:
-                    data[key] = []
-
-                data[key].append((timestamp, value))
-                data[key].sort(key=lambda tup: tup[0])
+                data = sock.recv(1024)
+                a = data.decode("utf-8","ignore")
+                data = dict()
+                if a == 'ok\n\n':
+                    return {}
+    
+                elif a == 'error\nwrong command\n\n':
+                    raise ClientError
+    
+                for row in a.split("\n")[1:-2]:
+                    key = str(row.split()[0])
+                    value = float(row.split()[1])
+                    timestamp = int(row.split()[2])
+    
+    
+                    if key not in data:
+                        data[key] = []
+    
+                    data[key].append((timestamp, value))
+                    data[key].sort(key=lambda tup: tup[0])
 
             return data
 
