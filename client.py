@@ -46,7 +46,14 @@ class Client:
                     self.data[key].append((timestamp, value))
                 else:
                     self.data[key].append((timestamp, value))
+            if key == '*':
+                return self.data
+            else:
+                if key in self.data:
+                    return {key: self.data[key]}
+                else:
+                    return {}
 
-            return self.data
+            
         except socket.error:
             raise ClientError
