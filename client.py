@@ -11,7 +11,7 @@ class Client:
         self.host = host
         self.port = port
         self.timeout = timeout
-        self.data = dict()
+
 
     def put(self, key, value, timestamp=None):
         timestamp = timestamp or str(int(time.time()))
@@ -21,15 +21,15 @@ class Client:
         except socket.error:
             raise ClientError
 
-    def get(self, key):
+    def get(self, name):
 
         try:
             with socket.create_connection((self.host, self.port), self.timeout) as sock:
-                sock.sendall(f"get {key}\n".encode("utf-8"))
+                sock.sendall(f"get {name}\n".encode("utf-8"))
 
             data = sock.recv(1024)
             a = data.decode("utf-8","ignore")
-            self.data = dict()
+            data = dict()
             if a == 'ok\n\n':
                 return {}
 
@@ -42,13 +42,13 @@ class Client:
                 timestamp = int(row.split()[2])
 
 
-                if key not in self.data:
-                    self.data[key] = []
+                if key not in data:
+                    data[key] = []
 
-                self.data[key].append((timestamp, value))
-                self.data[key].sort(key=lambda tup: tup[0])
+                data[key].append((timestamp, value))
+                data[key].sort(key=lambda tup: tup[0])
 
-            return self.data
+            return data
 
 
 
