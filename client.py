@@ -41,19 +41,16 @@ class Client:
                 value = float(row.split()[1])
                 timestamp = int(row.split()[2])
 
+
                 if key not in self.data:
                     self.data[key] = []
-                    self.data[key].append((timestamp, value))
-                else:
-                    self.data[key].append((timestamp, value))
-            if key == '*':
-                return self.data
-            else:
-                if key in self.data:
-                    return {key: self.data[key]}
-                else:
-                    return {}
 
-            
+                self.data[key].append((timestamp, value))
+                self.data[key].sort(key=lambda tup: tup[0])
+
+            return self.data
+
+
+
         except socket.error:
             raise ClientError
